@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.itemis.kerml2ecore</groupId>
+        <artifactId>root</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>kerml2ecore</artifactId>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        
+
+    </properties>
+
+    <dependencies>
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
+        
+        <dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.11.0</version>
+</dependency>
+
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+            <version>2.16.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+        
+
+        <dependency>
+  <groupId>org.omg.sysml</groupId>
+  <artifactId>org.omg.kerml.xtext</artifactId>
+  <version>0.46.0-SNAPSHOT</version>
+</dependency>
+
+<dependency>
+    <groupId>com.google.inject</groupId>
+    <artifactId>guice</artifactId>
+    <version>7.0.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.eclipse.xtext</groupId>
+    <artifactId>org.eclipse.xtext</artifactId>
+    <version>2.34.0</version>
+</dependency>
+    
+    <dependency>
+    <groupId>org.eclipse.xtext</groupId>
+    <artifactId>org.eclipse.xtext.common.types</artifactId>
+    <version>2.34.0</version>
+</dependency>
+
+<dependency>
+  <groupId>org.omg.sysml</groupId>
+  <artifactId>org.omg.sysml</artifactId>
+  <version>0.46.0-SNAPSHOT</version>
+</dependency>
+
+  <dependency>
+            <groupId>org.eclipse.uml2</groupId>
+            <artifactId>org.eclipse.uml2.common</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins> 
+
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+
+                    <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>com.itemis.kerml2ecore.SysMLReader</mainClass>
+            </manifest>
+        </archive>
+
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+        
+
+         
+        </plugins>
+    </build>
+
+</project>
