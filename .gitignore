@@ -1,0 +1,6 @@
+kerml2ecore/src/main/java-gen
+!.gitignore
+kerml2ecore/target
+no-git/
+kerml2ecore/no-git/
+
