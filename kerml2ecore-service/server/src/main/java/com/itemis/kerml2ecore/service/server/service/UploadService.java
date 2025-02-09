@@ -80,7 +80,7 @@ public class UploadService {
             logger.error("Error while extracting archive "+e.getMessage());
         }
 
-        return sysMLReader.read(tempDir.toString());
+        return sysMLReader.read(tempDir.toString(),"output.ecore");
        
     }
 

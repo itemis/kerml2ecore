@@ -6,6 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -22,31 +28,53 @@ public class SysMLReader {
     private static final Logger logger = Logger.getLogger(SysMLReader.class);
 
     public static void main(String[] args) {
-        SysMLReader sreader = new SysMLReader();
+        Options options = new Options();
 
-        sreader.read(args[0]);
+        options.addOption("i", "input", true, "Input directory");
+        options.addOption("o", "output", true, "Output file");
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            logger.error("Error parsing command line options", e);
+            formatter.printHelp("SysMLReader", options);
+            return;
+        }
+
+        String inputDir = cmd.getOptionValue("input");
+        String outputFileName = cmd.getOptionValue("output");
+
+        if (inputDir == null || outputFileName == null) {
+            logger.error("Usage: SysMLReader -i <input_directory> -o <output_file>");
+            formatter.printHelp("SysMLReader", options);
+            return;
+        }
+
+        SysMLReader sreader = new SysMLReader();
+        sreader.read(inputDir, outputFileName);
     }
 
-    public File read(String args) {
+    public File read(String inputDir, String outputFileName) {
         Injector injector = new KerMLStandaloneSetup().createInjectorAndDoEMFRegistration();
         SysMLPackage registerMe = SysMLPackage.eINSTANCE;
         System.out.println(registerMe);
         injector.injectMembers(this);
 
-        logger.info("Loading resources from "+args);
+        logger.info("Loading resources from " + inputDir);
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
         try {
-            // Files.list(Paths.get(args)).forEach(x -> logger.info(x.getFileName()));
-            Files.walk(Paths.get(args)).filter(p -> p.getFileName().toString().endsWith(".kerml"))
-            
+            Files.walk(Paths.get(inputDir)).filter(p -> p.getFileName().toString().endsWith(".kerml"))
             .map(p -> p.toAbsolutePath().normalize())
-            .forEach( p -> {
-                logger.info("Loading "+p.toString());
+            .forEach(p -> {
+                logger.info("Loading " + p.toString());
                 Resource scalarResource = resourceSet.getResource(URI.createFileURI(p.toString()), true);
             });
         } catch (IOException e) {
-            logger.error("Fatal error while loading");
-            e.printStackTrace();
+            logger.error("Fatal error while loading", e);
         }
          
         var pack = Streams.stream(resourceSet.getAllContents())
@@ -55,7 +83,7 @@ public class SysMLReader {
                 .findFirst().get();
 
         var transformer = new Kerml2Ecore();
-        return transformer.createFile(resourceSet);
+        return transformer.createFile(resourceSet, outputFileName);
         // Streams.stream(resource.getAllContents()).forEach(System.out::println);
 
     }
